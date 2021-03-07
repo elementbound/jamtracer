@@ -109,6 +109,28 @@ public class Vector {
   }
 
   /**
+   * Get vector component.
+   *
+   * @param i component index
+   *
+   * @return component value
+   */
+  public double get(int i) {
+    assert i < data.length : "Component index out of bounds!";
+
+    return data[i];
+  }
+
+  /**
+   * Get vector dimensionality.
+   *
+   * @return dimension count
+   */
+  public int dimensions() {
+    return data.length;
+  }
+
+  /**
    * Get vector length.
    *
    * @return vector length.
