@@ -5,9 +5,14 @@ import com.github.elementbound.jamtracer.display.AWTWindowDisplay;
 import com.github.elementbound.jamtracer.display.Display;
 
 /**
- * Jamtracer application entry point.
+ * Jamtracer application.
  */
 public class Jamtracer {
+  /**
+   * Jamtracer entry point.
+   *
+   * @param args CLI params
+   */
   public static void main(String[] args) {
     System.out.println("Jamtracer!");
 

@@ -2,11 +2,16 @@ package com.github.elementbound.jamtracer.display;
 
 import com.github.elementbound.jamtracer.core.Color;
 import com.github.elementbound.jamtracer.core.ColorUtils;
-
-import java.awt.*;
+import java.awt.Frame;
+import java.awt.Graphics;
+import java.awt.Window;
 import java.awt.image.BufferedImage;
-import java.awt.image.ImageObserver;
 
+/**
+ * AWT-based implementation of {@link Display}.
+ *
+ * <p>Images are presented in a window.</p>
+ */
 public class AWTWindowDisplay implements Display {
   private final Window window;
   private final Graphics graphics;
@@ -14,12 +19,18 @@ public class AWTWindowDisplay implements Display {
   private final int width;
   private final int height;
 
+  /**
+   * Create a new {@link AWTWindowDisplay} with given size.
+   *
+   * @param width  display width
+   * @param height display height
+   */
   public AWTWindowDisplay(int width, int height) {
     this.width = width;
     this.height = height;
     this.window = new Frame("Jamtracer");
     this.image = new BufferedImage(this.width, this.height, BufferedImage.TYPE_INT_RGB);
-    
+
     this.window.setSize(this.width, this.height);
     this.window.setVisible(true);
     this.graphics = this.window.getGraphics();
@@ -45,11 +56,6 @@ public class AWTWindowDisplay implements Display {
 
   @Override
   public void present() {
-    graphics.drawImage(image, 0, 0, new ImageObserver() {
-      @Override
-      public boolean imageUpdate(Image img, int infoflags, int x, int y, int width, int height) {
-        return false;
-      }
-    });
+    graphics.drawImage(image, 0, 0, (img, infoflags, x, y, width, height) -> false);
   }
 }
