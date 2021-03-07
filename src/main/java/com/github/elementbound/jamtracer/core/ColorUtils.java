@@ -39,17 +39,6 @@ public class ColorUtils {
   }
 
   /**
-   * Clamp a value to [0,1] range.
-   *
-   * @param value value
-   *
-   * @return clamped value
-   */
-  public static double saturate(double value) {
-    return Math.min(1.0, Math.max(value, 0.0));
-  }
-
-  /**
    * Clamp a color from HDR to LDR, limiting all components to [0,1] range.
    *
    * @param color color
@@ -58,10 +47,10 @@ public class ColorUtils {
    */
   public static Color saturate(Color color) {
     return new Color(
-            saturate(color.getRed()),
-            saturate(color.getGreen()),
-            saturate(color.getBlue()),
-            saturate(color.getAlpha())
+            MathUtils.saturate(color.getRed()),
+            MathUtils.saturate(color.getGreen()),
+            MathUtils.saturate(color.getBlue()),
+            MathUtils.saturate(color.getAlpha())
     );
   }
 }
