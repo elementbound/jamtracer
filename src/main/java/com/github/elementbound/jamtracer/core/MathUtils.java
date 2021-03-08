@@ -1,5 +1,8 @@
 package com.github.elementbound.jamtracer.core;
 
+/**
+ * Extra utilities for maths.
+ */
 public class MathUtils {
   private static double DEFAULT_EPSILON = 1e-6;
 
