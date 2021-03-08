@@ -24,6 +24,17 @@ public class Vector {
   public static Vector DOWN = new Vector(0.0, 0.0, -1.0);
 
   /**
+   * Create a 2D vector from coordinates.
+   *
+   * @param x x coordinate
+   * @param y y coordinate
+   */
+  public Vector(double x, double y) {
+    data = new double[]{x, y};
+    precalculateProperties();
+  }
+
+  /**
    * Create a 3D vector from coordinates.
    *
    * @param x x coordinate
