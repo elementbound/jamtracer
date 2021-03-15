@@ -243,7 +243,7 @@ public class Vector {
    * @return true if normalzied
    */
   public boolean isNormalized() {
-    return MathUtils.compare(this.length(), 1.0);
+    return MathUtils.fuzzyEquals(this.length(), 1.0);
   }
 
   /**

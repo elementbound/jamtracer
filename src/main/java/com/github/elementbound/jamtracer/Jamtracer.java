@@ -5,6 +5,8 @@ import com.github.elementbound.jamtracer.core.Vector;
 import com.github.elementbound.jamtracer.display.AWTWindowDisplay;
 import com.github.elementbound.jamtracer.display.Display;
 import com.github.elementbound.jamtracer.raytracing.camera.PerspectiveCamera;
+import com.github.elementbound.jamtracer.raytracing.shape.Shape;
+import com.github.elementbound.jamtracer.raytracing.shape.SphereShape;
 
 /**
  * Jamtracer application.
@@ -28,10 +30,23 @@ public class Jamtracer {
     camera.setAspectRatio(WIDTH, HEIGHT);
     camera.setFieldOfView(120.0);
 
+    Shape sphere = new SphereShape();
+
     System.out.println("Starting render loop!");
+
+    var angle = 0.0;
     while (display.isOpen()) {
+      angle += 20.0;
+
       camera.getTransform().update()
-              .rotate(new Vector(0.0, 0.0, 10.0))
+              .setRotation(new Vector(0.0, 0.0, angle))
+              .done();
+
+      // Place sphere in front of camera
+      sphere.getTransform().update()
+              .setPosition(camera.getTransform().getMatrix()
+                      .transform(Vector.FORWARD.scale(2.0).asHeterogeneous())
+                      .asHomogeneous())
               .done();
 
       for (int y = 0; y < display.getHeight(); y++) {
@@ -43,6 +58,15 @@ public class Jamtracer {
           var direction = ray.getDirection();
 
           display.setPixel(x, y, new Color(direction.get(0), direction.get(1), direction.get(2)));
+
+          var hitResult = sphere.raycast(ray);
+          if (hitResult.isHit()) {
+            var normal = hitResult.normal();
+            var texcoords = hitResult.texcoords();
+
+            // display.setPixel(x, y, new Color(normal.get(0), normal.get(1), normal.get(2)));
+            display.setPixel(x, y, new Color(texcoords.get(0), texcoords.get(1), 0.0));
+          }
         }
         display.present();
       }

@@ -2,11 +2,12 @@ package com.github.elementbound.jamtracer.raytracing.shape;
 
 import com.github.elementbound.jamtracer.raytracing.Ray;
 import com.github.elementbound.jamtracer.raytracing.RaycastResult;
+import com.github.elementbound.jamtracer.raytracing.Transformable;
 
 /**
  * Interface to represent any shape that can be raytraced.
  */
-public interface Shape {
+public interface Shape extends Transformable {
   /**
    * Cast ray against the shape and return its result.
    *

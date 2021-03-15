@@ -25,8 +25,8 @@ public class MathUtils {
    *
    * @return true if fuzzy equal
    */
-  public static boolean compare(double a, double b) {
-    return compare(a, b, DEFAULT_EPSILON);
+  public static boolean fuzzyEquals(double a, double b) {
+    return fuzzyEquals(a, b, DEFAULT_EPSILON);
   }
 
   /**
@@ -38,7 +38,7 @@ public class MathUtils {
    *
    * @return true if difference smaller than epsilon
    */
-  public static boolean compare(double a, double b, double epsilon) {
+  public static boolean fuzzyEquals(double a, double b, double epsilon) {
     return Math.abs(a - b) <= epsilon;
   }
 }

@@ -106,13 +106,13 @@ public class Transform {
    * @return object space ray
    */
   public Ray inverseTransformRay(Ray ray) {
-    var from = ray.getFrom();
-    var to = from.add(ray.getDirection());
+    var from = ray.getFrom().asHeterogeneous();
+    var to = ray.getPoint(1.0).asHeterogeneous();
 
     from = inverseMatrix.transform(from);
     to = inverseMatrix.transform(to);
 
-    return Ray.lookat(from, to);
+    return Ray.lookat(from.asHomogeneous(), to.asHomogeneous());
   }
 
   private void updateMatrices() {
@@ -143,11 +143,23 @@ public class Transform {
             .multiply(rotY)
             .multiply(rotX);
 
+    matrix = rotX
+            .multiply(rotY)
+            .multiply(rotZ)
+            .multiply(scaling)
+            .multiply(translation);
+
     inverseMatrix = inverseRotX
             .multiply(inverseRotY)
             .multiply(inverseRotZ)
             .multiply(inverseScaling)
             .multiply(inverseTranslation);
+
+    inverseMatrix = inverseTranslation
+            .multiply(inverseScaling)
+            .multiply(inverseRotZ)
+            .multiply(inverseRotY)
+            .multiply(inverseRotX);
   }
 
   /**

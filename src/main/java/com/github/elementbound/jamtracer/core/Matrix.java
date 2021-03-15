@@ -74,7 +74,8 @@ public class Matrix {
    * @return transformed vector
    */
   public Vector transform(Vector that) {
-    assert this.columns == that.dimensions();
+    assert this.columns == that.dimensions() : "Can't transform " + that.dimensions() + "D vector "
+            + "by " + this.rows + "x" + this.columns + " matrix!";
 
     double[] result = IntStream.range(0, that.dimensions())
             .mapToDouble(i -> IntStream.range(0, this.columns)
@@ -278,7 +279,7 @@ public class Matrix {
     return this.rows == matrix.rows
             && this.columns == matrix.rows
             && IntStream.range(0, this.data.length)
-                .allMatch(i -> MathUtils.compare(this.data[i], matrix.data[i]));
+                .allMatch(i -> MathUtils.fuzzyEquals(this.data[i], matrix.data[i]));
   }
 
   @Override
