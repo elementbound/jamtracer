@@ -120,6 +120,28 @@ public class Vector {
   }
 
   /**
+   * Multiply piece-wise by another vector.
+   *
+   * @param that right hand vector
+   *
+   * @return piecewise multiplication of vectors
+   */
+  public Vector multiply(Vector that) {
+    return performBinaryPiecewise(that, (a, b) -> a * b);
+  }
+
+  /**
+   * Divide piece-wise by another vector.
+   *
+   * @param that right hand vector
+   *
+   * @return piecewise division of vectors
+   */
+  public Vector divide(Vector that) {
+    return performBinaryPiecewise(that, (a, b) -> a / b);
+  }
+
+  /**
    * Get vector component.
    *
    * @param i component index

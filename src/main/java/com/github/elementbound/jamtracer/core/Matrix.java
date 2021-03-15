@@ -167,6 +167,63 @@ public class Matrix {
   }
 
   /**
+   * Create a matrix to rotate around the X axis.
+   *
+   * @param angle angle
+   *
+   * @return rotation matrix
+   */
+  public static Matrix rotateAroundX(double angle) {
+    double sin = Math.sin(angle);
+    double cos = Math.cos(angle);
+
+    return new Matrix(4, 4, new double[]{
+      1.0, 0.0, 0.0, 0.0,
+      0.0, cos, -sin, 0.0,
+      0.0, sin, cos, 0.0,
+      0.0, 0.0, 0.0, 1.0
+    });
+  }
+
+  /**
+   * Create a matrix to rotate around the Y axis.
+   *
+   * @param angle angle
+   *
+   * @return rotation matrix
+   */
+  public static Matrix rotateAroundY(double angle) {
+    double sin = Math.sin(angle);
+    double cos = Math.cos(angle);
+
+    return new Matrix(4, 4, new double[]{
+      cos, 0.0, sin, 0.0,
+      0.0, 1.0, 0.0, 0.0,
+      -sin, 0.0, cos, 0.0,
+      0.0, 0.0, 0.0, 1.0
+    });
+  }
+
+  /**
+   * Create a matrix to rotate around the Z axis.
+   *
+   * @param angle angle
+   *
+   * @return rotation matrix
+   */
+  public static Matrix rotateAroundZ(double angle) {
+    double sin = Math.sin(angle);
+    double cos = Math.cos(angle);
+
+    return new Matrix(4, 4, new double[]{
+      cos, -sin, 0.0, 0.0,
+      sin, cos, 0.0, 0.0,
+      0.0, 0.0, 1.0, 0.0,
+      0.0, 0.0, 0.0, 1.0
+    });
+  }
+
+  /**
    * Create matrix from array.
    *
    * <p>Matrix size must match the size of the supplied data, i.e. the array's length must be equal
