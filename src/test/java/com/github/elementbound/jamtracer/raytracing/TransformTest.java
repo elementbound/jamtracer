@@ -11,11 +11,11 @@ public class TransformTest {
   public void inverseMatrixShouldNegateMatrix() {
     // Given
     Transform transform = new Transform();
-    transform
+    transform.update()
             .setPosition(new Vector(1.0, 2.0, 3.0))
             .setRotation(new Vector(30.0, 45.0, 60.0))
             .setScale(new Vector(1.0, 2.0, 4.0))
-            .update();
+            .done();
 
     Matrix expected = Matrix.identity(4);
 

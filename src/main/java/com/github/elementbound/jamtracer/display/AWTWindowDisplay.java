@@ -41,6 +41,8 @@ public class AWTWindowDisplay implements Display {
     this.window.setVisible(true);
     this.graphics = this.window.getGraphics();
 
+    isOpen = true;
+
     this.window.addWindowListener(new WindowAdapter() {
       @Override
       public void windowOpened(WindowEvent e) {

@@ -2,6 +2,7 @@ package com.github.elementbound.jamtracer.raytracing.camera;
 
 import com.github.elementbound.jamtracer.core.Vector;
 import com.github.elementbound.jamtracer.raytracing.Ray;
+import com.github.elementbound.jamtracer.raytracing.Transform;
 
 /**
  * Perspective implementation of {@link Camera}.
@@ -9,6 +10,7 @@ import com.github.elementbound.jamtracer.raytracing.Ray;
 public class PerspectiveCamera implements Camera {
   private double aspectRatio;
   private double fieldOfView;
+  private Transform transform;
 
   /**
    * Construct camera with default settings.
@@ -16,6 +18,7 @@ public class PerspectiveCamera implements Camera {
   public PerspectiveCamera() {
     aspectRatio = 1.0;
     fieldOfView = Math.toRadians(60.0);
+    transform = new Transform();
   }
 
   /**
@@ -27,6 +30,7 @@ public class PerspectiveCamera implements Camera {
   public PerspectiveCamera(double aspectRatio, double fieldOfView) {
     this.aspectRatio = aspectRatio;
     this.fieldOfView = fieldOfView;
+    transform = new Transform();
   }
 
   /**
@@ -58,7 +62,7 @@ public class PerspectiveCamera implements Camera {
   }
 
   /**
-   * Get field of view.
+   * Get field of view in degrees.
    *
    * @return field of view
    */
@@ -67,7 +71,7 @@ public class PerspectiveCamera implements Camera {
   }
 
   /**
-   * Set field of view.
+   * Set field of view in degrees.
    *
    * @param fieldOfView field of view
    */
@@ -77,15 +81,25 @@ public class PerspectiveCamera implements Camera {
 
   @Override
   public Ray getRay(Vector texcoords) {
-    double planeHeight = Math.tan(this.fieldOfView / 2.0);
+    double planeHeight = Math.tan(Math.toRadians(this.fieldOfView) / 2.0);
     double planeWidth = planeHeight * aspectRatio;
 
     Vector target = new Vector(
             (2.0 * texcoords.get(0) - 1.0) * planeWidth,
             1.0,
-            (2.0 * texcoords.get(0) - 1.0) * planeHeight
+            (1.0 - 2.0 * texcoords.get(1)) * planeHeight
     );
 
-    return Ray.lookat(Vector.ZERO, target);
+    return transform.transformRay(Ray.lookat(Vector.ZERO, target));
+  }
+
+  @Override
+  public Transform getTransform() {
+    return transform;
+  }
+
+  @Override
+  public void setTransform(Transform transform) {
+    this.transform = transform;
   }
 }

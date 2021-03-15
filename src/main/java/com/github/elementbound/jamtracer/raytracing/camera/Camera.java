@@ -2,6 +2,7 @@ package com.github.elementbound.jamtracer.raytracing.camera;
 
 import com.github.elementbound.jamtracer.core.Vector;
 import com.github.elementbound.jamtracer.raytracing.Ray;
+import com.github.elementbound.jamtracer.raytracing.Transform;
 
 /**
  * Interface to represent cameras.
@@ -16,4 +17,18 @@ public interface Camera {
    * @return ray
    */
   Ray getRay(Vector texcoords);
+
+  /**
+   * Get camera transform.
+   *
+   * @return transform
+   */
+  Transform getTransform();
+
+  /**
+   * Set camera transform.
+   *
+   * @param transform camera transform
+   */
+  void setTransform(Transform transform);
 }

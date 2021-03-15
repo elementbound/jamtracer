@@ -277,7 +277,8 @@ public class Matrix {
 
     return this.rows == matrix.rows
             && this.columns == matrix.rows
-            && Arrays.equals(this.data, matrix.data);
+            && IntStream.range(0, this.data.length)
+                .allMatch(i -> MathUtils.compare(this.data[i], matrix.data[i]));
   }
 
   @Override

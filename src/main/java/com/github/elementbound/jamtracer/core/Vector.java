@@ -173,6 +173,35 @@ public class Vector {
   }
 
   /**
+   * Convert position to heterogeneous coordinates.
+   *
+   * @return heterogeneous position
+   */
+  public Vector asHeterogeneous() {
+    var data = new double[4];
+
+    Arrays.fill(data, 0.0);
+    System.arraycopy(this.data, 0, data, 0, Math.min(4, this.data.length));
+    data[3] = 1.0;
+
+    return new Vector(data);
+  }
+
+  /**
+   * Convert position to homogeneous coordinates.
+   *
+   * @return homogeneous position
+   */
+  public Vector asHomogeneous() {
+    var data = new double[3];
+
+    Arrays.fill(data, 0.0);
+    System.arraycopy(this.data, 0, data, 0, Math.min(3, this.data.length));
+
+    return new Vector(data);
+  }
+
+  /**
    * Calculate vector dot product.
    *
    * @param that right hand vector

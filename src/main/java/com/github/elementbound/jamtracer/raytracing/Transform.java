@@ -73,42 +73,46 @@ public class Transform {
   }
 
   /**
-   * Set transform position.
-   *
-   * @param position position
+   * Initiate transform update.
    *
    * @return transform update
    */
-  public TransformUpdater setPosition(Vector position) {
-    assert position.dimensions() == 3 : "Transform position must be 3D!";
-
-    return new TransformUpdater(position, this.scale, this.rotation, this);
+  public TransformUpdater update() {
+    return new TransformUpdater(this.position, this.scale, this.rotation, this);
   }
 
   /**
-   * Set transform scale.
+   * Apply transform to ray, i.e. transform ray from object space to world space.
    *
-   * @param scale scale
+   * @param ray object space ray
    *
-   * @return transform update
+   * @return world space ray
    */
-  public TransformUpdater setScale(Vector scale) {
-    assert scale.dimensions() == 3 : "Transform scale must be 3D!";
+  public Ray transformRay(Ray ray) {
+    var from = ray.getFrom().asHeterogeneous();
+    var to = ray.getPoint(1.0).asHeterogeneous();
 
-    return new TransformUpdater(this.position, scale, this.rotation, this);
+    from = matrix.transform(from);
+    to = matrix.transform(to);
+
+    return Ray.lookat(from.asHomogeneous(), to.asHomogeneous());
   }
 
   /**
-   * Set transform rotation, in degrees for each axis.
+   * Apply inverse transform to ray, i.e. transform ray from world space to object space.
    *
-   * @param rotation rotation
+   * @param ray world space ray
    *
-   * @return transform update
+   * @return object space ray
    */
-  public TransformUpdater setRotation(Vector rotation) {
-    assert rotation.dimensions() == 3 : "Transform rotation must be 3D!";
+  public Ray inverseTransformRay(Ray ray) {
+    var from = ray.getFrom();
+    var to = from.add(ray.getDirection());
 
-    return new TransformUpdater(this.position, this.scale, rotation, this);
+    from = inverseMatrix.transform(from);
+    to = inverseMatrix.transform(to);
+
+    return Ray.lookat(from, to);
   }
 
   private void updateMatrices() {
@@ -139,11 +143,11 @@ public class Transform {
             .multiply(rotY)
             .multiply(rotX);
 
-    inverseMatrix = inverseTranslation
-            .multiply(inverseScaling)
-            .multiply(inverseRotZ)
+    inverseMatrix = inverseRotX
             .multiply(inverseRotY)
-            .multiply(inverseRotX);
+            .multiply(inverseRotZ)
+            .multiply(inverseScaling)
+            .multiply(inverseTranslation);
   }
 
   /**
@@ -205,9 +209,65 @@ public class Transform {
     }
 
     /**
-     * Update transform.
+     * Translate transform.
+     *
+     * @param offset offset
+     *
+     * @return transform update
      */
-    public void update() {
+    public TransformUpdater translate(Vector offset) {
+      this.position = this.position.add(offset);
+      return this;
+    }
+
+    /**
+     * Scale transform.
+     *
+     * @param scalars scalars
+     *
+     * @return transform update
+     */
+    public TransformUpdater scale(Vector scalars) {
+      this.scale = this.scale.multiply(scalars);
+      return this;
+    }
+
+    /**
+     * Uniformly scale transform.
+     *
+     * @param scalar scalar
+     *
+     * @return transform update
+     */
+    public TransformUpdater scale(double scalar) {
+      this.scale = this.scale.scale(scalar);
+      return this;
+    }
+
+    /**
+     * Rotate transform.
+     *
+     * @param rotation Rotation in XYZ degrees
+     *
+     * @return transform update
+     */
+    public TransformUpdater rotate(Vector rotation) {
+      this.rotation = this.rotation.add(rotation);
+      return this;
+    }
+
+    /**
+     * Update transform, call when done with the update.
+     */
+    public void done() {
+      transform.position = this.position;
+      transform.scale = this.scale;
+      transform.rotation = new Vector(
+              this.rotation.get(0) % 360.0,
+              this.rotation.get(1) % 360.0,
+              this.rotation.get(2) % 360.0
+      );
+
       transform.updateMatrices();
     }
   }
