@@ -17,6 +17,7 @@ public class Jamtracer {
     System.out.println("Jamtracer!");
 
     Display display = new AWTWindowDisplay(320, 240);
+    display.onClose().subscribe(v -> System.exit(0));
 
     for (int y = 0; y < display.getHeight(); y++) {
       for (int x = 0; x < display.getWidth(); x++) {
