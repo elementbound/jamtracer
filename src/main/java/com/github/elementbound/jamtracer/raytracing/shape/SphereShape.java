@@ -43,8 +43,8 @@ public class SphereShape implements Shape {
     if (discriminant < 0.0) {
       return RaycastResult.NO_HIT;
     } else {
-      var t1 = -b + Math.sqrt(discriminant) / 2.0 * a;
-      var t2 = -b - Math.sqrt(discriminant) / 2.0 * a;
+      var t1 = (-b + Math.sqrt(discriminant)) / 2.0 * a;
+      var t2 = (-b - Math.sqrt(discriminant)) / 2.0 * a;
       var t = 0.0;
 
       if (t1 < 0.0 && t2 < 0.0) {
