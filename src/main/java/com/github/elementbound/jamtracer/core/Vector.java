@@ -1,19 +1,24 @@
 package com.github.elementbound.jamtracer.core;
 
 import java.util.Arrays;
+import java.util.Iterator;
+import java.util.Spliterator;
+import java.util.Spliterators;
 import java.util.function.DoubleBinaryOperator;
 import java.util.function.DoubleUnaryOperator;
+import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 
 /**
  * Immutable class to represent vectors with arbitrary dimensions.
  */
-public class Vector {
+public class Vector implements Iterable<Double> {
   private final double[] data;
   private double length;
 
   public static Vector ONE = new Vector(1.0, 1.0, 1.0);
   public static Vector ZERO = new Vector(0.0, 0.0, 0.0);
+  public static Vector NEGATIVE_ONE = new Vector(-1.0, -1.0, -1.0);
 
   public static Vector RIGHT = new Vector(1.0, 0.0, 0.0);
   public static Vector FORWARD = new Vector(0.0, 1.0, 0.0);
@@ -142,6 +147,15 @@ public class Vector {
   }
 
   /**
+   * Calculate piecewise reciprocal.
+   *
+   * @return piecewise reciprocal
+   */
+  public Vector reciprocal() {
+    return performUnaryPiecewise(v -> 1.0 / v);
+  }
+
+  /**
    * Get vector component.
    *
    * @param i component index
@@ -183,6 +197,21 @@ public class Vector {
     Arrays.fill(data, 0.0);
     System.arraycopy(this.data, 0, data, 0, Math.min(4, this.data.length));
     data[3] = 1.0;
+
+    return new Vector(data);
+  }
+
+  /**
+   * Convert normal to heterogeneous coordinates.
+   *
+   * @return heterogeneous normal
+   */
+  public Vector asHeterogeneousNormal() {
+    var data = new double[4];
+
+    Arrays.fill(data, 0.0);
+    System.arraycopy(this.data, 0, data, 0, Math.min(4, this.data.length));
+    data[3] = 0.0;
 
     return new Vector(data);
   }
@@ -305,5 +334,46 @@ public class Vector {
   @Override
   public int hashCode() {
     return Arrays.hashCode(data);
+  }
+
+  @Override
+  public Iterator<Double> iterator() {
+    return new VectorIterator(this);
+  }
+
+  @Override
+  public Spliterator<Double> spliterator() {
+    return Spliterators.spliterator(data, Spliterator.IMMUTABLE
+            | Spliterator.NONNULL | Spliterator.SIZED);
+  }
+
+  /**
+   * Transform vector by applying a piecewise function.
+   *
+   * @param operator function
+   *
+   * @return transform result
+   */
+  public Vector map(DoubleUnaryOperator operator) {
+    return performUnaryPiecewise(operator);
+  }
+
+  private class VectorIterator implements Iterator<Double> {
+    private int index;
+    private final Vector vector;
+
+    public VectorIterator(Vector vector) {
+      this.vector = vector;
+    }
+
+    @Override
+    public boolean hasNext() {
+      return index + 1 < vector.dimensions();
+    }
+
+    @Override
+    public Double next() {
+      return vector.get(index++);
+    }
   }
 }

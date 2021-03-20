@@ -42,6 +42,19 @@ public class VectorTest {
     assertThat(actual, is(expected));
   }
 
+  @Test
+  public void reciprocalShouldReturnExpected() {
+    // Given
+    Vector vector = new Vector(1.0, 2.0, 4.0);
+    Vector expected = new Vector(1.0, 0.5, 0.25);
+
+    // When
+    Vector actual = vector.reciprocal();
+
+    // Then
+    assertThat(actual, is(expected));
+  }
+
   @DataProvider
   public Object[][] dotProvider() {
     return new Object[][]{

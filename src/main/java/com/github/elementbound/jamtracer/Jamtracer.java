@@ -5,8 +5,8 @@ import com.github.elementbound.jamtracer.core.Vector;
 import com.github.elementbound.jamtracer.display.AWTWindowDisplay;
 import com.github.elementbound.jamtracer.display.Display;
 import com.github.elementbound.jamtracer.raytracing.camera.PerspectiveCamera;
+import com.github.elementbound.jamtracer.raytracing.shape.CubeShape;
 import com.github.elementbound.jamtracer.raytracing.shape.Shape;
-import com.github.elementbound.jamtracer.raytracing.shape.SphereShape;
 
 /**
  * Jamtracer application.
@@ -30,7 +30,7 @@ public class Jamtracer {
     camera.setAspectRatio(WIDTH, HEIGHT);
     camera.setFieldOfView(120.0);
 
-    Shape sphere = new SphereShape();
+    Shape shape = new CubeShape();
 
     System.out.println("Starting render loop!");
 
@@ -43,10 +43,11 @@ public class Jamtracer {
               .done();
 
       // Place sphere in front of camera
-      sphere.getTransform().update()
+      shape.getTransform().update()
               .setPosition(camera.getTransform().getMatrix()
-                      .transform(Vector.FORWARD.scale(2.0).asHeterogeneous())
+                      .transform(Vector.FORWARD.scale(4.0).asHeterogeneous())
                       .asHomogeneous())
+              .setScale(new Vector(2.0, 1.0, 1.0))
               .done();
 
       for (int y = 0; y < display.getHeight(); y++) {
@@ -59,7 +60,7 @@ public class Jamtracer {
 
           display.setPixel(x, y, new Color(direction.get(0), direction.get(1), direction.get(2)));
 
-          var hitResult = sphere.raycast(ray);
+          var hitResult = shape.raycast(ray);
           if (hitResult.isHit()) {
             var normal = hitResult.normal();
             var texcoords = hitResult.texcoords();
