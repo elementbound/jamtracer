@@ -42,9 +42,8 @@ public class CubeShape implements Shape {
       tmax = Math.min(tmax, Math.max(t1, t2));
     }
 
-    if (tmax >= tmin) {
+    if (tmax >= tmin && tmin >= 0.0) {
       Vector localPoint = localRay.getPoint(tmin);
-      Vector point = ray.getPoint(tmin);
       Vector normal = Vector.ZERO;
       Vector texcoords = Vector.ZERO;
 
@@ -64,7 +63,10 @@ public class CubeShape implements Shape {
       normal = transform.getMatrix().transform(normal.asHeterogeneousNormal()).asHomogeneous();
       texcoords = texcoords.map(v -> (1.0 + v) / 2.0);
 
-      return new RaycastResult(true, this, point, normal, texcoords);
+      Vector point = transform.getMatrix().transform(localPoint.asHeterogeneous()).asHomogeneous();
+      double distance = Vector.distance(ray.getFrom(), point);
+
+      return new RaycastResult(true, this, distance, point, normal, texcoords);
     } else {
       return RaycastResult.NO_HIT;
     }

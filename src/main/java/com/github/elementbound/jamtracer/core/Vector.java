@@ -6,7 +6,6 @@ import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.function.DoubleBinaryOperator;
 import java.util.function.DoubleUnaryOperator;
-import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 
 /**
@@ -284,6 +283,27 @@ public class Vector implements Iterable<Double> {
     return isNormalized()
             ? this
             : this.scale(1.0 / this.length());
+  }
+
+  /**
+   * Calculate distance between two points.
+   *
+   * @param a point A
+   * @param b point B
+   *
+   * @return distance
+   */
+  public static double distance(Vector a, Vector b) {
+    assert a.dimensions() == b.dimensions()
+            : "Can't calculate distance between mismatching lengths!";
+
+    double distance = 0.0;
+
+    for (int i = 0; i < a.dimensions(); ++i) {
+      distance += Math.pow(b.get(i) - a.get(i), 2.0);
+    }
+
+    return Math.sqrt(distance);
   }
 
   private double calculateLength() {

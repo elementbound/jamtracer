@@ -6,8 +6,9 @@ import com.github.elementbound.jamtracer.raytracing.shape.Shape;
 /**
  * Class to represent a raycast result.
  */
-public record RaycastResult(boolean isHit, Shape shape, Vector point, Vector normal,
+public record RaycastResult(boolean isHit, Shape shape, double distance, Vector point,
+                            Vector normal,
                             Vector texcoords) {
   public static RaycastResult NO_HIT =
-          new RaycastResult(false, null, Vector.ZERO, Vector.ZERO, Vector.ZERO);
+          new RaycastResult(false, null, -1.0, Vector.ZERO, Vector.ZERO, Vector.ZERO);
 }

@@ -55,14 +55,17 @@ public class SphereShape implements Shape {
         t = Math.min(t1, t2);
       }
 
-      var hitPoint = ray.getPoint(t);
-      var normal = hitPoint.normalized();
+      var localPoint = localRay.getPoint(t);
+      var hitPoint = transform.getMatrix().transform(localPoint.asHeterogeneous()).asHomogeneous();
+      var normal = localPoint.normalized();
       var texcoords = new Vector(
               (Math.PI + Math.atan2(normal.get(1), normal.get(0))) / (2.0 * Math.PI),
               (Math.PI / 2.0 + Math.asin(normal.get(2))) / Math.PI
       );
+      normal = transform.getMatrix().transform(normal.asHeterogeneousNormal()).asHomogeneous();
+      double distance = Vector.distance(ray.getFrom(), hitPoint);
 
-      return new RaycastResult(true, this, hitPoint, normal, texcoords);
+      return new RaycastResult(true, this, distance, hitPoint, normal, texcoords);
     }
   }
 }
