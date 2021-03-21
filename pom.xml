@@ -6,7 +6,19 @@
 
     <groupId>com.github.elementbound</groupId>
     <artifactId>jamtracer</artifactId>
-    <version>0.21.2-SNAPSHOT</version>
+    <version>0.21.3-SNAPSHOT</version>
+
+    <name>Jamtracer</name>
+    <description>A simple a raytracer in Java</description>
+    <url>https://github.com/elementbound/jamtracer</url>
+    <inceptionYear>2021</inceptionYear>
+    <licenses>
+        <license>
+            <name>MIT license</name>
+            <url>https://opensource.org/licenses/MIT</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
 
     <properties>
         <maven.compiler.source>14</maven.compiler.source>
@@ -58,7 +70,7 @@
                             <shadedArtifactAttached>true</shadedArtifactAttached>
                             <transformers>
                                 <transformer implementation=
-                                     "org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                                     "org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                     <mainClass>com.github.elementbound.jamtracer.Jamtracer</mainClass>
                                 </transformer>
                             </transformers>
