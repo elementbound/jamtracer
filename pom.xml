@@ -6,7 +6,7 @@
 
     <groupId>com.github.elementbound</groupId>
     <artifactId>jamtracer</artifactId>
-    <version>0.21.1-SNAPSHOT</version>
+    <version>0.21.2-SNAPSHOT</version>
 
     <properties>
         <maven.compiler.source>14</maven.compiler.source>
@@ -43,6 +43,28 @@
                     <target>14</target>
                     <compilerArgs>--enable-preview</compilerArgs>
                 </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.2.1</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <shadedArtifactAttached>true</shadedArtifactAttached>
+                            <transformers>
+                                <transformer implementation=
+                                     "org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>com.github.elementbound.jamtracer.Jamtracer</mainClass>
+                                </transformer>
+                            </transformers>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
 
             <plugin>
