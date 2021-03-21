@@ -143,32 +143,11 @@ public class Transform {
     Matrix inverseRotY = Matrix.rotateAroundY(-Math.toRadians(rotation.get(1)));
     Matrix inverseRotZ = Matrix.rotateAroundZ(-Math.toRadians(rotation.get(2)));
 
-    /*
-    Matrix multiplication order is the reverse of transformation order.
-    So here, we:
-      1. Rotate around X axis
-      2. Rotate around Y axis
-      3. Rotate around Z axis
-      4. Scale
-      5. Translate
-     */
-    matrix = translation
-            .multiply(scaling)
-            .multiply(rotZ)
-            .multiply(rotY)
-            .multiply(rotX);
-
     matrix = rotX
             .multiply(rotY)
             .multiply(rotZ)
             .multiply(scaling)
             .multiply(translation);
-
-    inverseMatrix = inverseRotX
-            .multiply(inverseRotY)
-            .multiply(inverseRotZ)
-            .multiply(inverseScaling)
-            .multiply(inverseTranslation);
 
     inverseMatrix = inverseTranslation
             .multiply(inverseScaling)
