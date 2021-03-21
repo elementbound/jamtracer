@@ -17,6 +17,7 @@ public class Color {
   private static int COMPONENT_COUNT = 4;
 
   public static Color WHITE = new Color(1.0, 1.0, 1.0);
+  public static Color GRAY = new Color(0.5, 0.5, 0.5);
   public static Color RED = new Color(1.0, 0.0, 0.0);
   public static Color GREEN = new Color(0.0, 1.0, 0.0);
   public static Color BLUE = new Color(0.0, 0.0, 1.0);
@@ -137,7 +138,7 @@ public class Color {
   }
 
   /**
-   * Dividy by color.
+   * Divide by color.
    *
    * @param that divisor
    *
@@ -145,6 +146,20 @@ public class Color {
    */
   public Color divide(Color that) {
     return zipMap(that, (a, b) -> a / b);
+  }
+
+  /**
+   * Mix with another color.
+   * <p>A factor of 0.0 will return the current color, 1.0 will return the other color, and 0.5 will
+   * return a color exactly halfway between the two.</p>
+   *
+   * @param that other color
+   * @param factor mix factor
+   *
+   * @return a mixture of the two colors.
+   */
+  public Color mix(Color that, double factor) {
+    return zipMap(that, (a, b) -> (1.0 - factor) * a + b * factor);
   }
 
   /**
@@ -172,5 +187,33 @@ public class Color {
             .mapToDouble(i -> operator.applyAsDouble(this.data[i], that.data[i]))
             .toArray()
     );
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
+    Color color = (Color) o;
+
+    return Arrays.equals(data, color.data);
+  }
+
+  @Override
+  public int hashCode() {
+    return Arrays.hashCode(data);
+  }
+
+  @Override
+  public String toString() {
+    final StringBuilder sb = new StringBuilder("Color{");
+    sb.append("data=").append(Arrays.toString(data));
+    sb.append('}');
+    return sb.toString();
   }
 }

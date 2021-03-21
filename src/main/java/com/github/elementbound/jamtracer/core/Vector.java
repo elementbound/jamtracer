@@ -282,7 +282,9 @@ public class Vector implements Iterable<Double> {
   public Vector normalized() {
     return isNormalized()
             ? this
-            : this.scale(1.0 / this.length());
+            : (this.length != 0.0
+            ? this.scale(1.0 / this.length())
+            : this.map(v -> 0.0));
   }
 
   /**

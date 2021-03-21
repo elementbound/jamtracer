@@ -5,33 +5,24 @@ import com.github.elementbound.jamtracer.core.MathUtils;
 import com.github.elementbound.jamtracer.raytracing.Ray;
 import com.github.elementbound.jamtracer.raytracing.RayContext;
 import com.github.elementbound.jamtracer.raytracing.RaycastResult;
+import com.github.elementbound.jamtracer.raytracing.pigment.Pigment;
 
 /**
  * Diffuse material implementation based on Lambert's cosine law.
  */
 public class DiffuseMaterial implements Material {
-  private Color color;
+  private Pigment pigment;
 
-  public DiffuseMaterial(Color color) {
-    this.color = color;
+  public DiffuseMaterial(Pigment pigment) {
+    this.pigment = pigment;
   }
 
-  /**
-   * Get material color.
-   *
-   * @return color
-   */
-  public Color getColor() {
-    return color;
+  public Pigment getPigment() {
+    return pigment;
   }
 
-  /**
-   * Set material color.
-   *
-   * @param color color
-   */
-  public void setColor(Color color) {
-    this.color = color;
+  public void setPigment(Pigment pigment) {
+    this.pigment = pigment;
   }
 
   @Override
@@ -56,6 +47,6 @@ public class DiffuseMaterial implements Material {
       contributions = contributions.add(light.getColor().multiply(light.getIntensity() * f));
     }
 
-    return color.multiply(contributions);
+    return pigment.evaluate(rayContext.raycastResult().texcoords()).multiply(contributions);
   }
 }

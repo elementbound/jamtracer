@@ -8,6 +8,7 @@ import com.github.elementbound.jamtracer.raytracing.light.DirectionalLight;
 import com.github.elementbound.jamtracer.raytracing.material.DiffuseMaterial;
 import com.github.elementbound.jamtracer.raytracing.material.Material;
 import com.github.elementbound.jamtracer.raytracing.material.ReflectiveMaterial;
+import com.github.elementbound.jamtracer.raytracing.pigment.ColorPigment;
 import com.github.elementbound.jamtracer.raytracing.shape.CubeShape;
 import com.github.elementbound.jamtracer.raytracing.shape.Shape;
 import com.github.elementbound.jamtracer.raytracing.shape.SphereShape;
@@ -37,16 +38,16 @@ public class SphereDemo implements JamDemo {
     camera.setAspectRatio(raytracer.getDisplay().getWidth(), raytracer.getDisplay().getHeight());
 
     camera.getTransform().update()
-            .setRotation(new Vector(pitch, 0.0, yaw))
-            .done();
+        .setRotation(new Vector(pitch, 0.0, yaw))
+        .done();
 
     var backward = camera.getTransform().getMatrix()
-            .transform(Vector.BACKWARD.asHeterogeneousNormal()).asHomogeneous()
-            .scale(8.0);
+        .transform(Vector.BACKWARD.asHeterogeneousNormal()).asHomogeneous()
+        .scale(8.0);
 
     camera.getTransform().update()
-            .setPosition(backward)
-            .done();
+        .setPosition(backward)
+        .done();
 
     raytracer.setCamera(camera);
     raytracer.setScene(scene);
@@ -61,7 +62,7 @@ public class SphereDemo implements JamDemo {
 
   private Scene createScene() {
     final Scene scene = new SimpleScene();
-    final Material material = new DiffuseMaterial(Color.WHITE);
+    final Material material = new DiffuseMaterial(new ColorPigment(Color.WHITE));
     final Material reflectiveMaterial = new ReflectiveMaterial();
 
     DirectionalLight sun = new DirectionalLight();
@@ -72,22 +73,22 @@ public class SphereDemo implements JamDemo {
 
     Shape floor = new CubeShape();
     floor.getTransform().update()
-            .setScale(new Vector(4.0, 4.0, 1.0))
-            .setPosition(new Vector(0.0, 0.0, -1.0))
-            .done();
+        .setScale(new Vector(4.0, 4.0, 1.0))
+        .setPosition(new Vector(0.0, 0.0, -1.0))
+        .done();
     floor.setMaterial(reflectiveMaterial);
 
     scene.addShape(floor);
 
     Stream.of(-1.0, 0.0, 1.0)
-            .map(i -> {
-              var sphere = new SphereShape();
-              sphere.getTransform().update()
-                      .setPosition(new Vector(i, 0.0, (1.0 + i) * 1.0))
-                      .done();
-              sphere.setMaterial(i != 0.0 ? reflectiveMaterial : material);
-              return sphere;
-            }).forEach(scene::addShape);
+        .map(i -> {
+          var sphere = new SphereShape();
+          sphere.getTransform().update()
+              .setPosition(new Vector(i, 0.0, (1.0 + i) * 1.0))
+              .done();
+          sphere.setMaterial(i != 0.0 ? reflectiveMaterial : material);
+          return sphere;
+        }).forEach(scene::addShape);
 
     scene.prepare();
 
