@@ -6,7 +6,7 @@
 
     <groupId>com.github.elementbound</groupId>
     <artifactId>jamtracer</artifactId>
-    <version>0.21.0-SNAPSHOT</version>
+    <version>0.21.1-SNAPSHOT</version>
 
     <properties>
         <maven.compiler.source>14</maven.compiler.source>

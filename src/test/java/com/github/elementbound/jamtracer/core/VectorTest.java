@@ -55,35 +55,49 @@ public class VectorTest {
     assertThat(actual, is(expected));
   }
 
+  @Test
+  public void reflectShouldReturnExpected() {
+    // Given
+    var incidence = new Vector(1.0, -1.0).normalized();
+    var normal = new Vector(0.0, 1.0);
+    var expected = new Vector(1.0, 1.0).normalized();
+
+    // When
+    var actual = Vector.reflect(incidence, normal);
+
+    // Then
+    assertThat(actual, is(expected));
+  }
+
   @DataProvider
   public Object[][] dotProvider() {
     return new Object[][]{
-            {new Vector(1.0, 1.0, 1.0), new Vector(1.0, 1.0, 1.0), 3.0},
-            {new Vector(1.0, 0.0, 0.0), new Vector(0.0, 1.0, 0.0), 0.0},
-            {new Vector(1.0, 1.0, 1.0), new Vector(-1.0, 1.0, -1.0), -1.0},
+        {new Vector(1.0, 1.0, 1.0), new Vector(1.0, 1.0, 1.0), 3.0},
+        {new Vector(1.0, 0.0, 0.0), new Vector(0.0, 1.0, 0.0), 0.0},
+        {new Vector(1.0, 1.0, 1.0), new Vector(-1.0, 1.0, -1.0), -1.0},
     };
   }
 
   @DataProvider
   public Object[][] crossProvider() {
     return new Object[][]{
-            {Vector.RIGHT, Vector.FORWARD, Vector.UP},
-            {Vector.LEFT, Vector.BACKWARD, Vector.UP},
+        {Vector.RIGHT, Vector.FORWARD, Vector.UP},
+        {Vector.LEFT, Vector.BACKWARD, Vector.UP},
 
-            {Vector.FORWARD, Vector.UP, Vector.RIGHT},
-            {Vector.BACKWARD, Vector.DOWN, Vector.RIGHT},
+        {Vector.FORWARD, Vector.UP, Vector.RIGHT},
+        {Vector.BACKWARD, Vector.DOWN, Vector.RIGHT},
 
-            {Vector.UP, Vector.RIGHT, Vector.FORWARD},
-            {Vector.DOWN, Vector.LEFT, Vector.FORWARD},
+        {Vector.UP, Vector.RIGHT, Vector.FORWARD},
+        {Vector.DOWN, Vector.LEFT, Vector.FORWARD},
     };
   }
 
   @DataProvider
   public Object[][] lengthProvider() {
     return new Object[][]{
-            {new Vector(1.0, 0.0, 0.0), 1.0},
-            {new Vector(1.0, 0.0, 0.0, 0.0), 1.0},
-            {new Vector(2.0, 2.0, 0.0, 0.0), Math.sqrt(8.0)},
+        {new Vector(1.0, 0.0, 0.0), 1.0},
+        {new Vector(1.0, 0.0, 0.0, 0.0), 1.0},
+        {new Vector(2.0, 2.0, 0.0, 0.0), Math.sqrt(8.0)},
     };
   }
 }

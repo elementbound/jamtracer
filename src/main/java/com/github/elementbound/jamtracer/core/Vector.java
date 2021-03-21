@@ -306,6 +306,10 @@ public class Vector implements Iterable<Double> {
     return Math.sqrt(distance);
   }
 
+  public static Vector reflect(Vector incidence, Vector normal) {
+    return incidence.subtract(normal.scale(2.0 * incidence.dot(normal)));
+  }
+
   private double calculateLength() {
     return Math.sqrt(Arrays.stream(data)
             .map(v -> v * v)

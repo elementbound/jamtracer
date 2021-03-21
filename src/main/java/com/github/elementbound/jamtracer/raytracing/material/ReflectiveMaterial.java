@@ -1,6 +1,7 @@
 package com.github.elementbound.jamtracer.raytracing.material;
 
 import com.github.elementbound.jamtracer.core.Color;
+import com.github.elementbound.jamtracer.core.Vector;
 import com.github.elementbound.jamtracer.raytracing.Ray;
 import com.github.elementbound.jamtracer.raytracing.RayContext;
 
@@ -15,7 +16,7 @@ public class ReflectiveMaterial implements Material {
     var incoming = rayContext.ray().getDirection();
     var biasedOrigin = point.add(normal.scale(0.005));
 
-    var reflectTo = normal.add(incoming).add(normal);
+    var reflectTo = Vector.reflect(incoming, normal).normalized();
 
     return rayContext.raytracer().evaluateRay(new Ray(biasedOrigin, reflectTo), rayContext);
   }

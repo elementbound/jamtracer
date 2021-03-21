@@ -73,7 +73,8 @@ public class CubeShape implements Shape {
         texcoords = new Vector(localPoint.get(0), localPoint.get(1));
       }
 
-      normal = transform.getMatrix().transform(normal.asHeterogeneousNormal()).asHomogeneous();
+      normal = transform.getMatrix().transform(normal.asHeterogeneousNormal()).asHomogeneous()
+          .normalized();
       texcoords = texcoords.map(v -> (1.0 + v) / 2.0);
 
       Vector point = transform.getMatrix().transform(localPoint.asHeterogeneous()).asHomogeneous();
