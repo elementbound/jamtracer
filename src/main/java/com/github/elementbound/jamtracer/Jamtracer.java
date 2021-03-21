@@ -1,7 +1,7 @@
 package com.github.elementbound.jamtracer;
 
 import com.github.elementbound.jamtracer.demo.JamDemo;
-import com.github.elementbound.jamtracer.demo.SphereDemo;
+import com.github.elementbound.jamtracer.demo.ParrotDemo;
 import com.github.elementbound.jamtracer.display.AWTWindowDisplay;
 import com.github.elementbound.jamtracer.display.Display;
 import com.github.elementbound.jamtracer.raytracing.Raytracer;
@@ -29,7 +29,7 @@ public class Jamtracer {
     raytracer.setDisplay(display);
     raytracer.setRayDepthLimit(4);
 
-    JamDemo demo = new SphereDemo();
+    JamDemo demo = new ParrotDemo();
 
     if (PROGRESSIVE_RENDER_ENABLED) {
       var timer = new Timer();

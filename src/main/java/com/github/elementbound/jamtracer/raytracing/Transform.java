@@ -28,6 +28,21 @@ public class Transform {
   }
 
   /**
+   * Create a transform with given settings.
+   *
+   * @param position position
+   * @param rotation rotation
+   * @param scale scale
+   */
+  public Transform(Vector position, Vector rotation, Vector scale) {
+    this.position = position;
+    this.rotation = rotation;
+    this.scale = scale;
+
+    updateMatrices();
+  }
+
+  /**
    * Get transform positon.
    *
    * @return position
