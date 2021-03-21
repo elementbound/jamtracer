@@ -4,6 +4,7 @@ import com.github.elementbound.jamtracer.core.Vector;
 import com.github.elementbound.jamtracer.raytracing.Ray;
 import com.github.elementbound.jamtracer.raytracing.RaycastResult;
 import com.github.elementbound.jamtracer.raytracing.Transform;
+import com.github.elementbound.jamtracer.raytracing.material.Material;
 
 /**
  * Shape representing a unit-cube at origin.
@@ -11,9 +12,11 @@ import com.github.elementbound.jamtracer.raytracing.Transform;
  */
 public class CubeShape implements Shape {
   private Transform transform;
+  private Material material;
 
   public CubeShape() {
     transform = new Transform();
+    material = Material.DEFAULT_MATERIAL;
   }
 
   @Override
@@ -24,6 +27,16 @@ public class CubeShape implements Shape {
   @Override
   public void setTransform(Transform transform) {
     this.transform = transform;
+  }
+
+  @Override
+  public Material getMaterial() {
+    return material;
+  }
+
+  @Override
+  public void setMaterial(Material material) {
+    this.material = material;
   }
 
   @Override

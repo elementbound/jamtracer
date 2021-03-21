@@ -3,6 +3,7 @@ package com.github.elementbound.jamtracer.raytracing.shape;
 import com.github.elementbound.jamtracer.raytracing.Ray;
 import com.github.elementbound.jamtracer.raytracing.RaycastResult;
 import com.github.elementbound.jamtracer.raytracing.Transformable;
+import com.github.elementbound.jamtracer.raytracing.material.Material;
 
 /**
  * Interface to represent any shape that can be raytraced.
@@ -19,4 +20,8 @@ public interface Shape extends Transformable {
    * @return raycast result
    */
   RaycastResult raycast(Ray ray);
+
+  Material getMaterial();
+
+  void setMaterial(Material material);
 }

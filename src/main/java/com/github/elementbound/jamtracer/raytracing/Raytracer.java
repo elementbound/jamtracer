@@ -16,7 +16,6 @@ public class Raytracer {
   private Stream<Point> pixelStream(int width, int height) {
     int pixelCount = width * height;
     return IntStream.range(0, pixelCount)
-            .parallel()
             .map(i -> (79 + i * 97) % pixelCount)
             .mapToObj(i -> new Point(i % width, i / width));
   }
@@ -30,6 +29,7 @@ public class Raytracer {
    */
   public void render(Scene scene, Camera camera, Display display) {
     pixelStream(display.getWidth(), display.getHeight())
+            .parallel()
             .forEach(screenCoords -> {
               var ray = getRayForPixel(screenCoords, display, camera);
               var direction = ray.getDirection().map(d -> (1.0 + d) / 2.0);
@@ -43,10 +43,11 @@ public class Raytracer {
                 var point = hitResult.point().map(Math::abs).scale(1.0 / 8.0);
                 var df = hitResult.distance() / 16.0;
 
-                resultColor = new Color(normal.get(0), normal.get(1), normal.get(2));
+                // resultColor = new Color(normal.get(0), normal.get(1), normal.get(2));
                 // resultColor = new Color(texcoords.get(0), texcoords.get(1), 0.0);
                 // resultColor = new Color(df, df, df);
                 // resultColor = new Color(point.get(0), point.get(1), point.get(2));
+                resultColor = hitResult.shape().getMaterial().evaluate(scene, hitResult);
               }
 
               display.setPixel(screenCoords.x, screenCoords.y, resultColor);

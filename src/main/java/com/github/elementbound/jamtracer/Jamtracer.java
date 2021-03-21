@@ -1,10 +1,14 @@
 package com.github.elementbound.jamtracer;
 
+import com.github.elementbound.jamtracer.core.Color;
 import com.github.elementbound.jamtracer.core.Vector;
 import com.github.elementbound.jamtracer.display.AWTWindowDisplay;
 import com.github.elementbound.jamtracer.display.Display;
 import com.github.elementbound.jamtracer.raytracing.Raytracer;
 import com.github.elementbound.jamtracer.raytracing.camera.PerspectiveCamera;
+import com.github.elementbound.jamtracer.raytracing.light.DirectionalLight;
+import com.github.elementbound.jamtracer.raytracing.material.DiffuseMaterial;
+import com.github.elementbound.jamtracer.raytracing.material.Material;
 import com.github.elementbound.jamtracer.raytracing.shape.CubeShape;
 import com.github.elementbound.jamtracer.raytracing.shape.Shape;
 import com.github.elementbound.jamtracer.raytracing.shape.SphereShape;
@@ -48,7 +52,7 @@ public class Jamtracer {
 
       var backward = camera.getTransform().getMatrix()
               .transform(Vector.BACKWARD.asHeterogeneousNormal()).asHomogeneous()
-              .scale(6.0);
+              .scale(8.0);
 
       camera.getTransform().update()
               .setPosition(backward)
@@ -60,13 +64,21 @@ public class Jamtracer {
   }
 
   private static Scene createScene() {
-    Scene scene = new SimpleScene();
+    final Scene scene = new SimpleScene();
+    final Material material = new DiffuseMaterial(Color.WHITE);
+
+    DirectionalLight sun = new DirectionalLight();
+    scene.addLight(sun);
+    sun.setColor(Color.WHITE);
+    sun.setIntensity(1.0);
+    sun.setDirection(new Vector(-1.0, -1.0, -1.0));
 
     Shape floor = new CubeShape();
     floor.getTransform().update()
             .setScale(new Vector(4.0, 4.0, 1.0))
             .setPosition(new Vector(0.0, 0.0, -1.0))
             .done();
+    floor.setMaterial(material);
 
     scene.addShape(floor);
 
@@ -74,13 +86,11 @@ public class Jamtracer {
             .map(i -> {
               var sphere = new SphereShape();
               sphere.getTransform().update()
-                      .setPosition(Vector.RIGHT.scale(i))
+                      .setPosition(new Vector(i, 0.0, (1.0 + i) * 1.0))
                       .done();
+              sphere.setMaterial(material);
               return sphere;
             }).forEach(scene::addShape);
-
-    Shape sphere = new SphereShape();
-    scene.addShape(sphere);
 
     scene.prepare();
 

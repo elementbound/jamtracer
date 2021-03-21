@@ -2,6 +2,9 @@ package com.github.elementbound.jamtracer.core;
 
 import java.beans.ConstructorProperties;
 import java.util.Arrays;
+import java.util.function.DoubleBinaryOperator;
+import java.util.function.DoubleUnaryOperator;
+import java.util.stream.IntStream;
 
 /**
  * Class representing colors as immutable RGBA components, with each component represented as
@@ -94,5 +97,80 @@ public class Color {
    */
   public double getAlpha() {
     return data[3];
+  }
+
+  public Color add(Color that) {
+    return zipMap(that, Double::sum);
+  }
+
+  /**
+   * Subtract color.
+   *
+   * @param that right hand color
+   *
+   * @return subtraction result
+   */
+  public Color subtract(Color that) {
+    return zipMap(that, (a, b) -> a - b);
+  }
+
+  /**
+   * Multiply with color.
+   *
+   * @param that multiplier
+   *
+   * @return multiplication result
+   */
+  public Color multiply(Color that) {
+    return zipMap(that, (a, b) -> a * b);
+  }
+
+  /**
+   * Multiply by factor.
+   *
+   * @param factor factor
+   *
+   * @return multiplication result
+   */
+  public Color multiply(double factor) {
+    return map(v -> v * factor);
+  }
+
+  /**
+   * Dividy by color.
+   *
+   * @param that divisor
+   *
+   * @return division result
+   */
+  public Color divide(Color that) {
+    return zipMap(that, (a, b) -> a / b);
+  }
+
+  /**
+   * Create a new color by applying an operator to each of its components.
+   *
+   * @param operator operator
+   *
+   * @return result
+   */
+  public Color map(DoubleUnaryOperator operator) {
+    return new Color(Arrays.stream(data).map(operator).toArray());
+  }
+
+  /**
+   * Create a new color by zipping the two colors' components together and applying a binary
+   * operator on them.
+   *
+   * @param that other color
+   * @param operator binary operator
+   *
+   * @return result
+   */
+  public Color zipMap(Color that, DoubleBinaryOperator operator) {
+    return new Color(IntStream.range(0, 4)
+            .mapToDouble(i -> operator.applyAsDouble(this.data[i], that.data[i]))
+            .toArray()
+    );
   }
 }

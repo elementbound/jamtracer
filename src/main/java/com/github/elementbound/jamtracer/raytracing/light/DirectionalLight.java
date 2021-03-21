@@ -4,6 +4,7 @@ import com.github.elementbound.jamtracer.core.Color;
 import com.github.elementbound.jamtracer.core.Vector;
 import com.github.elementbound.jamtracer.raytracing.Ray;
 import com.github.elementbound.jamtracer.raytracing.RaycastResult;
+import com.github.elementbound.jamtracer.raytracing.shape.Shape;
 
 /**
  * Class representing an omnipresent light source, radiating light in a given direction.
@@ -53,11 +54,11 @@ public class DirectionalLight implements Light {
 
   @Override
   public Ray getRayTowardsSource(Vector point) {
-    return new Ray(point, direction);
+    return new Ray(point, direction.scale(-1.0));
   }
 
   @Override
-  public boolean isInShadow(Vector point, RaycastResult raycastResult) {
+  public boolean isInShadow(Shape shape, Vector point, RaycastResult raycastResult) {
     return raycastResult.isHit();
   }
 }
