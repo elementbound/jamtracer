@@ -62,6 +62,7 @@ public class GradientPigment implements Pigment {
   @Override
   public Color evaluate(Vector texcoords) {
     var f = texcoords.length() * direction.dot(texcoords.normalized());
+    f = Math.abs(f);
     return startColor.mix(endColor, f);
   }
 }

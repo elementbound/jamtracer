@@ -27,7 +27,7 @@ public class SimpleScene implements Scene {
     transform = new Transform();
     shapes = new HashSet<>();
     lights = new HashSet<>();
-    material = Material.DEFAULT_MATERIAL;
+    material = Material.DEFAULT_SCENE_MATERIAL;
   }
 
   @Override
@@ -56,10 +56,10 @@ public class SimpleScene implements Scene {
 
     // Raycast all shapes and return closest hit
     return shapes.stream()
-            .map(shape -> shape.raycast(localRay))
-            .filter(RaycastResult::isHit)
-            .min(Comparator.comparingDouble(RaycastResult::distance))
-            .orElse(RaycastResult.NO_HIT);
+        .map(shape -> shape.raycast(localRay))
+        .filter(RaycastResult::isHit)
+        .min(Comparator.comparingDouble(RaycastResult::distance))
+        .orElse(RaycastResult.NO_HIT);
   }
 
   @Override

@@ -96,15 +96,15 @@ public class Raytracer {
    */
   public void render() {
     pixelStream(display.getWidth(), display.getHeight())
-            .parallel()
-            .forEach(screenCoords -> {
-              var ray = getRayForPixel(screenCoords, display, camera);
+        .parallel()
+        .forEach(screenCoords -> {
+          var ray = getRayForPixel(screenCoords, display, camera);
 
-              var rayContext = new RayContext(this, ray, scene, RaycastResult.NO_HIT, 0);
-              Color resultColor = evaluateRay(ray, rayContext);
+          var rayContext = new RayContext(this, ray, scene, RaycastResult.NO_HIT, 0);
+          Color resultColor = evaluateRay(ray, rayContext);
 
-              display.setPixel(screenCoords.x, screenCoords.y, resultColor);
-            });
+          display.setPixel(screenCoords.x, screenCoords.y, resultColor);
+        });
   }
 
   /**
@@ -116,24 +116,26 @@ public class Raytracer {
    * @return traced color
    */
   public Color evaluateRay(Ray ray, RayContext rayContext) {
+    var contextWithRay = new RayContext(this, ray, rayContext.scene(),
+        rayContext.raycastResult(), rayContext.depth());
+
     if (rayContext.depth() > rayDepthLimit) {
-      return getSkyColor(ray);
+      return getSkyColor(contextWithRay);
     }
 
     var hitResult = scene.raycast(ray);
 
     if (hitResult.isHit()) {
       var newContext = new RayContext(this, ray, scene, hitResult,
-              rayContext.depth() + 1);
+          rayContext.depth() + 1);
       return hitResult.shape().getMaterial().evaluate(newContext);
     } else {
-      return getSkyColor(ray);
+      return getSkyColor(contextWithRay);
     }
   }
 
-  private Color getSkyColor(Ray ray) {
-    return new Color(ray.getDirection().get(0), ray.getDirection().get(1),
-            ray.getDirection().get(2));
+  private Color getSkyColor(RayContext rayContext) {
+    return scene.getMaterial().evaluate(rayContext);
   }
 
   private Ray getRayForPixel(Point screenCoords, Display display, Camera camera) {
@@ -146,7 +148,7 @@ public class Raytracer {
   private Stream<Point> pixelStream(int width, int height) {
     int pixelCount = width * height;
     return IntStream.range(0, pixelCount)
-            .map(i -> (79 + i * 97) % pixelCount)
-            .mapToObj(i -> new Point(i % width, i / width));
+        .map(i -> (79 + i * 97) % pixelCount)
+        .mapToObj(i -> new Point(i % width, i / width));
   }
 }

@@ -8,7 +8,9 @@ import com.github.elementbound.jamtracer.raytracing.light.DirectionalLight;
 import com.github.elementbound.jamtracer.raytracing.material.DiffuseMaterial;
 import com.github.elementbound.jamtracer.raytracing.material.Material;
 import com.github.elementbound.jamtracer.raytracing.material.ReflectiveMaterial;
+import com.github.elementbound.jamtracer.raytracing.material.SkyMaterial;
 import com.github.elementbound.jamtracer.raytracing.pigment.ColorPigment;
+import com.github.elementbound.jamtracer.raytracing.pigment.GradientPigment;
 import com.github.elementbound.jamtracer.raytracing.shape.CubeShape;
 import com.github.elementbound.jamtracer.raytracing.shape.Shape;
 import com.github.elementbound.jamtracer.raytracing.shape.SphereShape;
@@ -33,7 +35,7 @@ public class SphereDemo implements JamDemo {
 
   @Override
   public void update(Raytracer raytracer) {
-    yaw += 12.0;
+    yaw += 1.0;
 
     camera.setAspectRatio(raytracer.getDisplay().getWidth(), raytracer.getDisplay().getHeight());
 
@@ -64,6 +66,12 @@ public class SphereDemo implements JamDemo {
     final Scene scene = new SimpleScene();
     final Material material = new DiffuseMaterial(new ColorPigment(Color.WHITE));
     final Material reflectiveMaterial = new ReflectiveMaterial();
+
+    scene.setMaterial(new SkyMaterial(new GradientPigment(
+        new Color(0.25, 0.5, 0.75),
+        new Color(.75, .875, 1.0),
+        new Vector(1.0, 1.0, 1.0)
+    )));
 
     DirectionalLight sun = new DirectionalLight();
     scene.addLight(sun);

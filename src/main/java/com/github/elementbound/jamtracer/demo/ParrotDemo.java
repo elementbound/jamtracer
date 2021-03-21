@@ -9,7 +9,9 @@ import com.github.elementbound.jamtracer.raytracing.light.DirectionalLight;
 import com.github.elementbound.jamtracer.raytracing.material.DiffuseMaterial;
 import com.github.elementbound.jamtracer.raytracing.material.Material;
 import com.github.elementbound.jamtracer.raytracing.material.ReflectiveMaterial;
+import com.github.elementbound.jamtracer.raytracing.material.SkyMaterial;
 import com.github.elementbound.jamtracer.raytracing.pigment.ColorPigment;
+import com.github.elementbound.jamtracer.raytracing.pigment.GradientPigment;
 import com.github.elementbound.jamtracer.raytracing.pigment.Pigment;
 import com.github.elementbound.jamtracer.raytracing.shape.CubeShape;
 import com.github.elementbound.jamtracer.raytracing.shape.Shape;
@@ -59,7 +61,7 @@ public class ParrotDemo implements JamDemo {
     parrotColorIndex = (parrotColorIndex + 1) % parrotColors.length;
     parrotMaterial.setPigment(parrotPigments[parrotColorIndex]);
 
-    yaw += 12.0;
+    yaw += 2.0;
 
     camera.setAspectRatio(raytracer.getDisplay().getWidth(), raytracer.getDisplay().getHeight());
 
@@ -91,6 +93,12 @@ public class ParrotDemo implements JamDemo {
     final Material reflectiveMaterial = new ReflectiveMaterial();
     final Material beakMaterial = new DiffuseMaterial(new ColorPigment(beakColor));
     parrotMaterial = new DiffuseMaterial(new ColorPigment(parrotColors[0]));
+
+    scene.setMaterial(new SkyMaterial(new GradientPigment(
+        new Color(0.0, 0.0, 0.0),
+        new Color(0.25, 0.25, 0.25),
+        new Vector(0.25, 0.125, 1.0)
+    )));
 
     final var leftLight = new DirectionalLight();
     leftLight.setColor(parrotColors[0]);

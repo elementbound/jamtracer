@@ -10,6 +10,7 @@ import com.github.elementbound.jamtracer.raytracing.pigment.ColorPigment;
  */
 public interface Material {
   Material DEFAULT_MATERIAL = new DiffuseMaterial(new ColorPigment(Color.RED));
+  Material DEFAULT_SCENE_MATERIAL = new SkyMaterial(new ColorPigment(Color.RED));
 
   /**
    * Evaluate material for given point on surface.

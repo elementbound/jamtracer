@@ -6,7 +6,7 @@
 
     <groupId>com.github.elementbound</groupId>
     <artifactId>jamtracer</artifactId>
-    <version>0.22.0-SNAPSHOT</version>
+    <version>0.23.0-SNAPSHOT</version>
 
     <name>Jamtracer</name>
     <description>A simple a raytracer in Java</description>
