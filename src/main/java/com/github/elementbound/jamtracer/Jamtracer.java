@@ -15,14 +15,17 @@ import com.github.elementbound.jamtracer.raytracing.shape.Shape;
 import com.github.elementbound.jamtracer.raytracing.shape.SphereShape;
 import com.github.elementbound.jamtracer.raytracing.shape.scene.Scene;
 import com.github.elementbound.jamtracer.raytracing.shape.scene.SimpleScene;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.stream.Stream;
 
 /**
  * Jamtracer application.
  */
 public class Jamtracer {
-  private static final int WIDTH = 320;
-  private static final int HEIGHT = 240;
+  private static final int WIDTH = 640;
+  private static final int HEIGHT = 360;
+  private static final boolean PROGRESSIVE_RENDER_ENABLED = true;
 
   /**
    * Jamtracer entry point.
@@ -47,6 +50,16 @@ public class Jamtracer {
 
     var yaw = 0.0;
     var pitch = -45.0;
+
+    if (PROGRESSIVE_RENDER_ENABLED) {
+      var timer = new Timer();
+      timer.schedule(new TimerTask() {
+        @Override
+        public void run() {
+          display.present();
+        }
+      }, 200, 100);
+    }
 
     while (display.isOpen()) {
       yaw += 12.0;

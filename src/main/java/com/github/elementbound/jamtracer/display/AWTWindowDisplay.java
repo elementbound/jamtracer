@@ -114,7 +114,8 @@ public class AWTWindowDisplay implements Display {
     var destX = (size.width - destW) / 2.0;
     var destY = (size.height - destH) / 2.0;
 
-    graphics.drawImage(image, (int) destX, (int) destY, (int) (destX + destW), (int) (destY + destH),
+    graphics.drawImage(image,
+            (int) destX, (int) destY, (int) (destX + destW), (int) (destY + destH),
             0, 0, image.getWidth(), image.getHeight(),
             (img, infoflags, x, y, width, height) -> false);
   }
