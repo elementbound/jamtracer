@@ -5,10 +5,14 @@ import com.github.elementbound.jamtracer.core.ColorUtils;
 import com.github.elementbound.jamtracer.event.EventSource;
 import java.awt.Frame;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.Window;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
+import java.awt.image.ImageObserver;
 
 /**
  * AWT-based implementation of {@link Display}.
@@ -58,6 +62,13 @@ public class AWTWindowDisplay implements Display {
         onClose.emit(null);
       }
     });
+
+    this.window.addComponentListener(new ComponentAdapter() {
+      @Override
+      public void componentResized(ComponentEvent e) {
+        present();
+      }
+    });
   }
 
   @Override
@@ -92,6 +103,19 @@ public class AWTWindowDisplay implements Display {
 
   @Override
   public void present() {
-    graphics.drawImage(image, 0, 0, (img, infoflags, x, y, width, height) -> false);
+    var size = window.getSize();
+    var scale = Math.min(
+            (double) size.width / image.getWidth(),
+            (double) size.height / image.getHeight()
+    );
+
+    var destW = image.getWidth() * scale;
+    var destH = image.getHeight() * scale;
+    var destX = (size.width - destW) / 2.0;
+    var destY = (size.height - destH) / 2.0;
+
+    graphics.drawImage(image, (int) destX, (int) destY, (int) (destX + destW), (int) (destY + destH),
+            0, 0, image.getWidth(), image.getHeight(),
+            (img, infoflags, x, y, width, height) -> false);
   }
 }
