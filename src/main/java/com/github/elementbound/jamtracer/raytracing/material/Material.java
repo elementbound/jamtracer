@@ -1,8 +1,7 @@
 package com.github.elementbound.jamtracer.raytracing.material;
 
 import com.github.elementbound.jamtracer.core.Color;
-import com.github.elementbound.jamtracer.raytracing.RaycastResult;
-import com.github.elementbound.jamtracer.raytracing.shape.scene.Scene;
+import com.github.elementbound.jamtracer.raytracing.RayContext;
 
 /**
  * Interface for representing materials.
@@ -14,9 +13,9 @@ public interface Material {
   /**
    * Evaluate material for given point on surface.
    *
-   * @param scene scene
+   * @param rayContext ray context
    *
    * @return material color
    */
-  Color evaluate(Scene scene, RaycastResult sceneHit);
+  Color evaluate(RayContext rayContext);
 }

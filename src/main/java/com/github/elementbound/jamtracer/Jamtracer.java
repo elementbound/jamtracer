@@ -9,6 +9,7 @@ import com.github.elementbound.jamtracer.raytracing.camera.PerspectiveCamera;
 import com.github.elementbound.jamtracer.raytracing.light.DirectionalLight;
 import com.github.elementbound.jamtracer.raytracing.material.DiffuseMaterial;
 import com.github.elementbound.jamtracer.raytracing.material.Material;
+import com.github.elementbound.jamtracer.raytracing.material.ReflectiveMaterial;
 import com.github.elementbound.jamtracer.raytracing.shape.CubeShape;
 import com.github.elementbound.jamtracer.raytracing.shape.Shape;
 import com.github.elementbound.jamtracer.raytracing.shape.SphereShape;
@@ -39,6 +40,10 @@ public class Jamtracer {
     Scene scene = createScene();
 
     Raytracer raytracer = new Raytracer();
+    raytracer.setScene(scene);
+    raytracer.setCamera(camera);
+    raytracer.setDisplay(display);
+    raytracer.setRayDepthLimit(4);
 
     var yaw = 0.0;
     var pitch = -45.0;
@@ -58,7 +63,7 @@ public class Jamtracer {
               .setPosition(backward)
               .done();
 
-      raytracer.render(scene, camera, display);
+      raytracer.render();
       display.present();
     }
   }
@@ -66,6 +71,7 @@ public class Jamtracer {
   private static Scene createScene() {
     final Scene scene = new SimpleScene();
     final Material material = new DiffuseMaterial(Color.WHITE);
+    final Material reflectiveMaterial = new ReflectiveMaterial();
 
     DirectionalLight sun = new DirectionalLight();
     scene.addLight(sun);
@@ -78,7 +84,7 @@ public class Jamtracer {
             .setScale(new Vector(4.0, 4.0, 1.0))
             .setPosition(new Vector(0.0, 0.0, -1.0))
             .done();
-    floor.setMaterial(material);
+    floor.setMaterial(reflectiveMaterial);
 
     scene.addShape(floor);
 
@@ -88,7 +94,7 @@ public class Jamtracer {
               sphere.getTransform().update()
                       .setPosition(new Vector(i, 0.0, (1.0 + i) * 1.0))
                       .done();
-              sphere.setMaterial(material);
+              sphere.setMaterial(i != 0.0 ? reflectiveMaterial : material);
               return sphere;
             }).forEach(scene::addShape);
 

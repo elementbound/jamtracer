@@ -13,45 +13,127 @@ import java.util.stream.Stream;
  * Raytracer implementation.
  */
 public class Raytracer {
-  private Stream<Point> pixelStream(int width, int height) {
-    int pixelCount = width * height;
-    return IntStream.range(0, pixelCount)
-            .map(i -> (79 + i * 97) % pixelCount)
-            .mapToObj(i -> new Point(i % width, i / width));
+  private Scene scene;
+  private Camera camera;
+  private Display display;
+
+  private int rayDepthLimit;
+
+  /**
+   * Get scene.
+   *
+   * @return scene
+   */
+  public Scene getScene() {
+    return scene;
   }
 
   /**
-   * Render scene viewed from camera to a display.
+   * Set scene.
    *
-   * @param scene   scene
-   * @param camera  camera
-   * @param display output display
+   * @param scene scene
    */
-  public void render(Scene scene, Camera camera, Display display) {
+  public void setScene(Scene scene) {
+    this.scene = scene;
+  }
+
+  /**
+   * Get camera.
+   *
+   * @return camera
+   */
+  public Camera getCamera() {
+    return camera;
+  }
+
+  /**
+   * Set camera.
+   *
+   * @param camera camera
+   */
+  public void setCamera(Camera camera) {
+    this.camera = camera;
+  }
+
+  /**
+   * Get target display.
+   *
+   * @return display
+   */
+  public Display getDisplay() {
+    return display;
+  }
+
+  /**
+   * Set target display.
+   *
+   * @param display display
+   */
+  public void setDisplay(Display display) {
+    this.display = display;
+  }
+
+  /**
+   * Get ray depth limit.
+   *
+   * @return ray depth limit
+   */
+  public int getRayDepthLimit() {
+    return rayDepthLimit;
+  }
+
+  /**
+   * Set ray depth limit.
+   *
+   * @param rayDepthLimit ray depth limit
+   */
+  public void setRayDepthLimit(int rayDepthLimit) {
+    this.rayDepthLimit = rayDepthLimit;
+  }
+
+  /**
+   * Render scene.
+   */
+  public void render() {
     pixelStream(display.getWidth(), display.getHeight())
             .parallel()
             .forEach(screenCoords -> {
               var ray = getRayForPixel(screenCoords, display, camera);
-              var direction = ray.getDirection().map(d -> (1.0 + d) / 2.0);
 
-              var resultColor = new Color(direction.get(0), direction.get(1), direction.get(2));
-
-              var hitResult = scene.raycast(ray);
-              if (hitResult.isHit()) {
-                var normal = hitResult.normal();
-                var texcoords = hitResult.texcoords();
-                var point = hitResult.point().map(Math::abs).scale(1.0 / 8.0);
-                var df = hitResult.distance() / 16.0;
-
-                // resultColor = new Color(normal.get(0), normal.get(1), normal.get(2));
-                // resultColor = new Color(texcoords.get(0), texcoords.get(1), 0.0);
-                // resultColor = new Color(df, df, df);
-                // resultColor = new Color(point.get(0), point.get(1), point.get(2));
-                resultColor = hitResult.shape().getMaterial().evaluate(scene, hitResult);
-              }
+              var rayContext = new RayContext(this, ray, scene, RaycastResult.NO_HIT, 0);
+              Color resultColor = evaluateRay(ray, rayContext);
 
               display.setPixel(screenCoords.x, screenCoords.y, resultColor);
             });
+  }
+
+  /**
+   * Evaluate result of a given ray.
+   *
+   * @param ray        ray
+   * @param rayContext ray context
+   *
+   * @return traced color
+   */
+  public Color evaluateRay(Ray ray, RayContext rayContext) {
+    if (rayContext.depth() > rayDepthLimit) {
+      return getSkyColor(ray);
+    }
+
+    var hitResult = scene.raycast(ray);
+
+    if (hitResult.isHit()) {
+      var newContext = new RayContext(this, ray, scene, hitResult,
+              rayContext.depth() + 1);
+      return hitResult.shape().getMaterial().evaluate(newContext);
+    } else {
+      return getSkyColor(ray);
+    }
+  }
+
+  private Color getSkyColor(Ray ray) {
+    return new Color(ray.getDirection().get(0), ray.getDirection().get(1),
+            ray.getDirection().get(2));
   }
 
   private Ray getRayForPixel(Point screenCoords, Display display, Camera camera) {
@@ -59,5 +141,12 @@ public class Raytracer {
     double v = (double) screenCoords.y / display.getHeight();
 
     return camera.getRay(new Vector(u, v));
+  }
+
+  private Stream<Point> pixelStream(int width, int height) {
+    int pixelCount = width * height;
+    return IntStream.range(0, pixelCount)
+            .map(i -> (79 + i * 97) % pixelCount)
+            .mapToObj(i -> new Point(i % width, i / width));
   }
 }

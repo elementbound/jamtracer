@@ -3,8 +3,8 @@ package com.github.elementbound.jamtracer.raytracing.material;
 import com.github.elementbound.jamtracer.core.Color;
 import com.github.elementbound.jamtracer.core.MathUtils;
 import com.github.elementbound.jamtracer.raytracing.Ray;
+import com.github.elementbound.jamtracer.raytracing.RayContext;
 import com.github.elementbound.jamtracer.raytracing.RaycastResult;
-import com.github.elementbound.jamtracer.raytracing.shape.scene.Scene;
 
 /**
  * Diffuse material implementation based on Lambert's cosine law.
@@ -35,12 +35,13 @@ public class DiffuseMaterial implements Material {
   }
 
   @Override
-  public Color evaluate(Scene scene, RaycastResult sceneHit) {
+  public Color evaluate(RayContext rayContext) {
     Color contributions = Color.BLACK;
 
-    var shape = sceneHit.shape();
-    var point = sceneHit.point();
-    var normal = sceneHit.normal();
+    var scene = rayContext.scene();
+    var shape = rayContext.raycastResult().shape();
+    var point = rayContext.raycastResult().point();
+    var normal = rayContext.raycastResult().normal();
 
     for (var light : scene.getLights()) {
       Ray rayTowardsLight = light.getRayTowardsSource(point);
