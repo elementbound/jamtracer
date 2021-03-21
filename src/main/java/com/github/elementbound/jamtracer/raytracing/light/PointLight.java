@@ -4,7 +4,6 @@ import com.github.elementbound.jamtracer.core.Color;
 import com.github.elementbound.jamtracer.core.Vector;
 import com.github.elementbound.jamtracer.raytracing.Ray;
 import com.github.elementbound.jamtracer.raytracing.RaycastResult;
-import com.github.elementbound.jamtracer.raytracing.shape.Shape;
 
 /**
  * Class representing a light source emanating from a single point in space.
@@ -58,7 +57,7 @@ public class PointLight implements Light {
   }
 
   @Override
-  public boolean isInShadow(Shape shape, Vector point, RaycastResult raycastResult) {
+  public boolean isInShadow(Vector point, RaycastResult raycastResult) {
     if (!raycastResult.isHit()) {
       return false;
     } else {

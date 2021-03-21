@@ -39,14 +39,13 @@ public class DiffuseMaterial implements Material {
     Color contributions = Color.BLACK;
 
     var scene = rayContext.scene();
-    var shape = rayContext.raycastResult().shape();
     var point = rayContext.raycastResult().point();
     var normal = rayContext.raycastResult().normal();
 
     for (var light : scene.getLights()) {
       Ray rayTowardsLight = light.getRayTowardsSource(point);
       RaycastResult shadowResult = scene.raycastWithBias(rayTowardsLight, normal.scale(0.005));
-      boolean isInShadow = light.isInShadow(shape, point, shadowResult);
+      boolean isInShadow = light.isInShadow(point, shadowResult);
 
       if (isInShadow) {
         // No contribution from light

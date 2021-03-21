@@ -4,7 +4,6 @@ import com.github.elementbound.jamtracer.core.Color;
 import com.github.elementbound.jamtracer.core.Vector;
 import com.github.elementbound.jamtracer.raytracing.Ray;
 import com.github.elementbound.jamtracer.raytracing.RaycastResult;
-import com.github.elementbound.jamtracer.raytracing.shape.Shape;
 
 /**
  * Interface to represent lights.
@@ -41,7 +40,7 @@ public interface Light {
   /**
    * Get a ray from surface points towards the light source.
    * <p>This ray can be used to determine whether the surface is in shadow or not using
-   * {@link Light#isInShadow(Shape, Vector, RaycastResult)}</p>
+   * {@link Light#isInShadow(Vector, RaycastResult)}</p>
    *
    * @return ray towards light
    */
@@ -56,5 +55,5 @@ public interface Light {
    *
    * @return true if in shadow, false otherwise
    */
-  boolean isInShadow(Shape shape, Vector point, RaycastResult raycastResult);
+  boolean isInShadow(Vector point, RaycastResult raycastResult);
 }
