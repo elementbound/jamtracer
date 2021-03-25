@@ -81,16 +81,7 @@ public class PerspectiveCamera implements Camera {
 
   @Override
   public Ray getRay(Vector texcoords) {
-    double planeHeight = Math.tan(Math.toRadians(this.fieldOfView) / 2.0);
-    double planeWidth = planeHeight * aspectRatio;
-
-    Vector target = new Vector(
-            (2.0 * texcoords.get(0) - 1.0) * planeWidth,
-            1.0,
-            (1.0 - 2.0 * texcoords.get(1)) * planeHeight
-    );
-
-    return transform.transformRay(Ray.lookat(Vector.ZERO, target));
+    return new Ray(Vector.ZERO, Vector.FORWARD);
   }
 
   @Override

@@ -7,7 +7,6 @@ import com.github.elementbound.jamtracer.raytracing.light.Light;
 import com.github.elementbound.jamtracer.raytracing.material.Material;
 import com.github.elementbound.jamtracer.raytracing.shape.Shape;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -54,12 +53,7 @@ public class SimpleScene implements Scene {
   public RaycastResult raycast(Ray ray) {
     var localRay = transform.inverseTransformRay(ray);
 
-    // Raycast all shapes and return closest hit
-    return shapes.stream()
-        .map(shape -> shape.raycast(localRay))
-        .filter(RaycastResult::isHit)
-        .min(Comparator.comparingDouble(RaycastResult::distance))
-        .orElse(RaycastResult.NO_HIT);
+    return RaycastResult.NO_HIT;
   }
 
   @Override

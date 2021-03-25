@@ -47,9 +47,9 @@ public class SphereShape implements Shape {
     var localOrigin = localRay.getFrom();
 
     // See: https://viclw17.github.io/2018/07/16/raytracing-ray-sphere-intersection/
-    var a = localDirection.dot(localDirection);
-    var b = 2.0 * localOrigin.dot(localDirection);
-    var c = localOrigin.dot(localOrigin) - 1.0;
+    var a = 1.0;
+    var b = 1.0;
+    var c = 1.0;
 
     var discriminant = b * b - 4 * a * c;
 

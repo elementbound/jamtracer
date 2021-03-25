@@ -95,16 +95,7 @@ public class Raytracer {
    * Render scene.
    */
   public void render() {
-    pixelStream(display.getWidth(), display.getHeight())
-        .parallel()
-        .forEach(screenCoords -> {
-          var ray = getRayForPixel(screenCoords, display, camera);
 
-          var rayContext = new RayContext(this, ray, scene, RaycastResult.NO_HIT, 0);
-          Color resultColor = evaluateRay(ray, rayContext);
-
-          display.setPixel(screenCoords.x, screenCoords.y, resultColor);
-        });
   }
 
   /**
@@ -116,22 +107,7 @@ public class Raytracer {
    * @return traced color
    */
   public Color evaluateRay(Ray ray, RayContext rayContext) {
-    var contextWithRay = new RayContext(this, ray, rayContext.scene(),
-        rayContext.raycastResult(), rayContext.depth());
-
-    if (rayContext.depth() > rayDepthLimit) {
-      return getSkyColor(contextWithRay);
-    }
-
-    var hitResult = scene.raycast(ray);
-
-    if (hitResult.isHit()) {
-      var newContext = new RayContext(this, ray, scene, hitResult,
-          rayContext.depth() + 1);
-      return hitResult.shape().getMaterial().evaluate(newContext);
-    } else {
-      return getSkyColor(contextWithRay);
-    }
+    return Color.BLACK;
   }
 
   private Color getSkyColor(RayContext rayContext) {
