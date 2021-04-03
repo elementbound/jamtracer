@@ -60,4 +60,9 @@ public class DirectionalLight implements Light {
   public boolean isInShadow(Vector point, RaycastResult raycastResult) {
     return raycastResult.isHit();
   }
+
+  @Override
+  public double getContributionStrength(Vector point) {
+    return 1.0;
+  }
 }

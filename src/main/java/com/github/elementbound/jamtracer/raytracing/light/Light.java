@@ -42,6 +42,8 @@ public interface Light {
    * <p>This ray can be used to determine whether the surface is in shadow or not using
    * {@link Light#isInShadow(Vector, RaycastResult)}</p>
    *
+   * @param point surface point
+   *
    * @return ray towards light
    */
   Ray getRayTowardsSource(Vector point);
@@ -56,4 +58,13 @@ public interface Light {
    * @return true if in shadow, false otherwise
    */
   boolean isInShadow(Vector point, RaycastResult raycastResult);
+
+  /**
+   * Get light strength at given surface point.
+   *
+   * @param point surface point
+   *
+   * @return light strength
+   */
+  double getContributionStrength(Vector point);
 }

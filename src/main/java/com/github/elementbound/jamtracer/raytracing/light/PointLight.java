@@ -64,4 +64,9 @@ public class PointLight implements Light {
       return raycastResult.distance() < Vector.distance(point, position);
     }
   }
+
+  @Override
+  public double getContributionStrength(Vector point) {
+    return 1.0 / (1.0 + Vector.distance(position, point));
+  }
 }

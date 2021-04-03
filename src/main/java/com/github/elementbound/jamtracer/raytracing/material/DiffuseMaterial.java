@@ -43,7 +43,9 @@ public class DiffuseMaterial implements Material {
         continue;
       }
 
-      var f = MathUtils.saturate(normal.dot(rayTowardsLight.getDirection()));
+      var f = MathUtils.saturate(normal.dot(rayTowardsLight.getDirection()))
+          * light.getContributionStrength(point);
+
       contributions = contributions.add(light.getColor().multiply(light.getIntensity() * f));
     }
 
